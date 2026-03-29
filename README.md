@@ -1,0 +1,93 @@
+# AI in SSDLC — Hands-On Exercise
+
+## What this exercise is about
+
+You will implement the same feature twice — a password reset API — using an AI coding tool both times. The difference is *how* you engage with the AI before writing any code.
+
+The goal is not a finished, production-ready implementation. The goal is to **feel the difference** between prompting instinctively and prompting deliberately — and to see what each approach misses on a security-sensitive feature.
+
+---
+
+## Setup
+
+**Python version:** 3.11+
+
+**Install dependencies:**
+```bash
+pip install fastapi uvicorn python-jose[cryptography] passlib
+```
+
+**Run the app:**
+```bash
+uvicorn app:app --reload
+```
+
+The Swagger UI is available at `http://localhost:8000/docs` once the server is running.
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `requirements.md` | Feature requirements — **read this before starting** |
+| `helpers.py` | Shared utilities: DB mock, email mock, JWT helpers, logger — **do not modify** |
+| `app.py` | Starting point for **Round 1** |
+| `app_2.py` | Starting point for **Round 2** — identical copy, fresh start |
+
+`/register` and `/login` are already implemented in both files. Do not modify them.
+
+---
+
+## What to implement
+
+In both rounds, you implement the same four stubs:
+
+| Stub | Description |
+|------|-------------|
+| `create_reset_token(email)` | Creates a signed JWT encoding the email address |
+| `decode_reset_token(token)` | Decodes and validates a JWT, returns the email |
+| `POST /reset-password/request` | Accepts `{ "email": "..." }`, generates a token, calls `send_reset_email`, returns a generic confirmation |
+| `POST /reset-password/confirm` | Accepts `{ "token": "...", "new_password": "..." }`, validates the token, updates the password in the DB |
+
+The document [`requirements.md`](requirements.md) contains the full feature requirements as user stories. Read it carefully before starting.
+
+`helpers.py` provides everything you need: `db` (an in-memory document store pre-seeded with two users), `send_reset_email(address, token)` (prints to stdout), and `logger`.
+
+---
+
+## Round 1 — Vibe Coding (15 min)
+
+**File:** `app.py`
+
+Open [`requirements.md`](requirements.md), read it once, then start implementing using your AI tool — however you like. No rules, no structure. Just get it working.
+
+When you are done, leave the code as-is. Do not tidy it up.
+
+**Reflect before moving on:**
+- Does your implementation say anything if the email does not exist?
+- Can the same reset token be used more than once?
+- Does your JWT expire?
+
+---
+
+## Round 2 — Spec-Driven (20 min)
+
+**File:** `app_2.py`
+
+**Before writing a single line of code**, open a conversation with your AI agent. Ask it to review [`requirements.md`](requirements.md) from a security perspective and identify what is missing.
+
+There is no prompt template provided. Writing the prompt is part of the exercise — in the real world, thinking spec-first also means knowing what to ask.
+
+Once the agent has surfaced its findings, use that enriched understanding of the requirements to guide your implementation.
+
+**After implementing, compare:**
+- What did the agent flag that you had not thought of in Round 1?
+- What did the agent miss?
+- How different are [`app.py`](app.py) and [`app_2.py`](app_2.py)?
+- Could this conversation — "ask the agent to review the spec before coding" — become a standard step on your projects?
+
+---
+
+## Rules
+
+- Do not modify [`helpers.py`](helpers.py) or [`requirements.md`](requirements.md).
+- Do not look at each other's Round 2 prompts before writing your own.
