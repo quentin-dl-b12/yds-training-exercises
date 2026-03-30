@@ -9,7 +9,6 @@ Contains:
   - /reset-password/request   POST   TO BE IMPLEMENTED
   - /reset-password/confirm   POST   TO BE IMPLEMENTED
 
-Read requirements.md before starting.
 Use helpers.py for the database, email mock, JWT utilities, and logger.
 """
 
